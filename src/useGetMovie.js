@@ -4,15 +4,15 @@ import { useSelector } from "react-redux";
 import { useCallback } from "react";
 import { debounce } from "lodash";
 
-const apiUrl = `http://www.omdbapi.com?apikey=d91353fe`;
+const apiUrl = `https://www.omdbapi.com?apikey=d91353fe`;
 
 export const useGetMovie = () => {
   const movieName = useSelector((state) => state.movie.value.movieName);
 
   const debouncedSearch = useCallback(
-    debounce((searchTerm) => {
+    debounce((searchTerm, refetch) => {
       refetch();
-    }, 100),
+    }, 500), // Adjust the debounce time here (e.g., 500ms)
     []
   );
 
@@ -23,14 +23,14 @@ export const useGetMovie = () => {
   } = useQuery(
     ["movies", movieName],
     async () => {
-      // if (movieName) {
-      const response = await Axios.get(`${apiUrl}&s=${movieName}`);
-      return response.data.Search;
-      // } else {
-      //   // Fetch some movie data from the API for the initial list
-      //   const response = await Axios.get(`${apiUrl}&s=Harry Potter`);
-      //   return response.data.Search;
-      // }
+      if (movieName) {
+        const response = await Axios.get(`${apiUrl}&s=${movieName}`);
+        return response.data.Search;
+      } else {
+        // Fetch some movie data from the API for the initial list
+        const response = await Axios.get(`${apiUrl}&s=Harry Potter`);
+        return response.data.Search;
+      }
     },
     {
       enabled: true,
