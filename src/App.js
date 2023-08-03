@@ -12,7 +12,7 @@ function App() {
       <Provider store={store}>
         <Router>
           <Routes>
-            <Route path="/movies-search-react-app" element={<Movie />} />
+            <Route path="/" element={<Movie />} />
             <Route
               path="*"
               element={
